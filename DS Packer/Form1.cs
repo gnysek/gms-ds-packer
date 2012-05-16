@@ -216,7 +216,7 @@ namespace DS_Packer
 
 		private void btnOptions_Click(object sender, EventArgs e)
 		{
-			panelTop.Height = 200;
+			panelTop.Height = 250;
 		}
 
 	}
