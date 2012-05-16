@@ -1,0 +1,7 @@
+# use glob syntax.
+syntax: glob
+
+DS Packer\bin\Debug\*
+DS Packer\bin\Release\*.pdb
+DS Packer\bin\Release\*.vshost*
+obj\*
