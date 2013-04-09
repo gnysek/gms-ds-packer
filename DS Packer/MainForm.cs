@@ -50,9 +50,6 @@ namespace DS_Packer
 			while (i < _pStr.Length)
 			{
 				byte[] bytes = Encoding.UTF8.GetBytes(_pStr[i].ToString());
-				//string s = BitConverter.ToString(bytes).Replace("-", string.Empty);
-
-				//sb.Append(BitConverter.ToString(bytes).Replace("-", string.Empty));
 
 				foreach (byte b in bytes)
 				{
@@ -60,9 +57,6 @@ namespace DS_Packer
 					sb.Append(g_HexText[(b & 0xf)]);
 				}
 
-				//int c = (int)_pStr[i];
-				//sb.Append(g_HexText[((c >> 4) & 0xf)]);
-				//sb.Append(g_HexText[(c & 0xf)]);
 				i++;
 			}
 			return sb.ToString();
@@ -105,18 +99,18 @@ namespace DS_Packer
 		private void GenerateDSListFile(string filename)
 		{
 			StringBuilder sb = new StringBuilder();
-			int count = listView1.Items.Count;
+			int count = VirtualList.Count;
 
 			sb.Append("2D0100");
 			sb.Append(count.ToString("X4"));
 			sb.Append("000000");
-			foreach (ListViewItem pair in listView1.Items)
+			foreach (KeyValuePair<string, string> pair in VirtualList)
 			{
-				byte[] b = Encoding.UTF8.GetBytes(pair.SubItems[1].Text);
+				byte[] b = Encoding.UTF8.GetBytes(pair.Key);
 				sb.Append("010000000000000000000000");
 				sb.Append(b.Count().ToString("X2"));
 				sb.Append("000000");
-				sb.Append(StringToHex(pair.SubItems[1].Text));
+				sb.Append(StringToHex(pair.Value));
 			}
 
 			System.IO.File.WriteAllText(@filename, "ds_list_read(argument0, \"" + sb.ToString() + "\");");
@@ -140,15 +134,15 @@ namespace DS_Packer
 			 * if value == string -> +2
 			*/
 
-			foreach (ListViewItem pair in listView1.Items)
+			foreach (KeyValuePair<string, string> pair in VirtualList)
 			{
 				if (count != 0) sb.Append(",");
 				count++;
 				sb.Append("3:");
 				//sb.Append(DoubleToHex((double)count));
-				sb.Append(StringToHex(pair.SubItems[0].Text));
+				sb.Append(StringToHex(pair.Key));
 				sb.Append(":");
-				sb.Append(StringToHex(pair.SubItems[1].Text));
+				sb.Append(StringToHex(pair.Value));
 			}
 			System.IO.File.WriteAllText(@filename, "ds_map_read(argument0, \"" + sb.ToString() + "\");");
 		}
@@ -156,11 +150,10 @@ namespace DS_Packer
 		public void GenerateTXTFile(string filename)
 		{
 			StringBuilder sb = new StringBuilder();
-			//int count = 0;
 
-			foreach (ListViewItem pair in listView1.Items)
+			foreach (KeyValuePair<string, string> pair in VirtualList)
 			{
-				sb.Append(pair.SubItems[1].Text);
+				sb.Append(pair.Value);
 				sb.AppendLine();
 			}
 			System.IO.File.WriteAllText(@filename, sb.ToString());
@@ -169,11 +162,10 @@ namespace DS_Packer
 		public void GenerateCSVFile(string filename)
 		{
 			StringBuilder sb = new StringBuilder();
-			//int count = 0;
 
-			foreach (ListViewItem pair in listView1.Items)
+			foreach (KeyValuePair<string, string> pair in VirtualList)
 			{
-				sb.Append(pair.SubItems[0].Text + "," + pair.SubItems[1].Text);
+				sb.Append(pair.Key + "," + pair.Value);
 				sb.AppendLine();
 			}
 			System.IO.File.WriteAllText(@filename, sb.ToString(), Encoding.Unicode);
@@ -187,6 +179,7 @@ namespace DS_Packer
 
 		private ImportType FileType = ImportType.None;
 		public ExportType ExportSetting = ExportType.None;
+		public Dictionary<string, string> VirtualList = new Dictionary<string,string>();
 
 		public MainForm()
 		{
@@ -201,7 +194,9 @@ namespace DS_Packer
 
 		private void btnImportCSV_Click(object sender, EventArgs e)
 		{
-			listView1.Items.Clear();
+			VirtualList.Clear();
+			listView1.VirtualListSize = 0;
+
 			fileFilterCSV();
 			DialogResult d = openFileDialog1.ShowDialog();
 
@@ -267,28 +262,32 @@ namespace DS_Packer
 				{
 					if (_values[0].Trim().Length > 0)
 					{
-						ListViewItem l = listView1.Items.Add(x.ToString());
-						l.SubItems.Add(_values[0]);
+						VirtualList.Add(x.ToString(), _values[0]);
 					}
 				}
 				else
 				{
-
 					if (_values.Length >= 1 && _values[0].Trim().Length > 0)
 					{
-						ListViewItem l = listView1.Items.Add(_values[0]);
-						l.SubItems.Add(_values[1]);
+						VirtualList.Add(_values[0], _values[1]);
 					}
 				}
 
-				if (x % 200 == 0) listView1.Refresh();
+				
+				if (x % 50000 == 0) {
+					statusBarPanel3.Text = x.ToString();
+					statusBar1.Refresh();
+				}
+				
 			}
 			sr.Close();
+			statusBarPanel3.Text = VirtualList.Count.ToString();
+			listView1.VirtualListSize = VirtualList.Count;
 		}
 
 		private void buttonSave_Click(object sender, EventArgs e)
 		{
-			if (listView1.Items.Count == 0)
+			if (VirtualList.Count == 0)
 			{
 				MessageBox.Show("You cannot export empty list!", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
@@ -360,7 +359,7 @@ namespace DS_Packer
 			select.Checked = true;
 			statusBarPanel1.Text = select.Text;
 
-			if (listView1.Items.Count > 0)
+			if (VirtualList.Count > 0)
 			{
 				buttonSave_Click(buttonSave, new EventArgs());
 			}
@@ -380,7 +379,8 @@ namespace DS_Packer
 
 		private void buttonNew_Click(object sender, EventArgs e)
 		{
-			listView1.Items.Clear();
+			VirtualList.Clear();
+			listView1.VirtualListSize = 0;
 		}
 
 		private void menuItemTxt_Click(object sender, EventArgs e)
@@ -393,6 +393,16 @@ namespace DS_Packer
 		{
 			ExportSetting = ExportType.Csv;
 			uncheckAndCheckItem(sender as MenuItem);
+		}
+
+		private void listView1_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+		{
+			ListViewItem item = new ListViewItem();
+			KeyValuePair<string, string> element = VirtualList.ElementAt(e.ItemIndex);
+			item.Text = element.Key;
+			item.SubItems.Add(element.Value);
+
+			e.Item = item;
 		}
 
 	}

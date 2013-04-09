@@ -83,6 +83,7 @@
 			this.label10 = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.statusBarPanel3 = new System.Windows.Forms.StatusBarPanel();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
 			this.panel1.SuspendLayout();
@@ -93,6 +94,7 @@
 			this.panel4.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// listView1
@@ -112,6 +114,8 @@
 			this.listView1.TabIndex = 0;
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Details;
+			this.listView1.VirtualMode = true;
+			this.listView1.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.listView1_RetrieveVirtualItem);
 			// 
 			// cKey
 			// 
@@ -129,6 +133,7 @@
 			this.statusBar1.Name = "statusBar1";
 			this.statusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.statusBarPanel1,
+            this.statusBarPanel3,
             this.statusBarPanel2});
 			this.statusBar1.ShowPanels = true;
 			this.statusBar1.Size = new System.Drawing.Size(736, 22);
@@ -138,14 +143,17 @@
 			// 
 			// statusBarPanel1
 			// 
+			this.statusBarPanel1.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
 			this.statusBarPanel1.Name = "statusBarPanel1";
 			this.statusBarPanel1.Text = "-";
+			this.statusBarPanel1.Width = 18;
 			// 
 			// statusBarPanel2
 			// 
+			this.statusBarPanel2.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
 			this.statusBarPanel2.Name = "statusBarPanel2";
 			this.statusBarPanel2.Text = "-";
-			this.statusBarPanel2.Width = 500;
+			this.statusBarPanel2.Width = 698;
 			// 
 			// panel1
 			// 
@@ -226,7 +234,7 @@
 			this.label9.Size = new System.Drawing.Size(248, 52);
 			this.label9.TabIndex = 15;
 			this.label9.Text = "When exporting to GML, it will save script to which \r\nwill return map ID.\r\nFor mo" +
-    "re info, check ds_map_read & ds_list_read\r\nin GM:Studio documentation.";
+				"re info, check ds_map_read & ds_list_read\r\nin GM:Studio documentation.";
 			// 
 			// checkBox2
 			// 
@@ -642,6 +650,13 @@
 			// 
 			this.saveFileDialog1.SupportMultiDottedExtensions = true;
 			// 
+			// statusBarPanel3
+			// 
+			this.statusBarPanel3.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
+			this.statusBarPanel3.Name = "statusBarPanel3";
+			this.statusBarPanel3.Text = "0";
+			this.statusBarPanel3.Width = 20;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -672,6 +687,7 @@
 			this.panel3.PerformLayout();
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -732,6 +748,7 @@
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.StatusBarPanel statusBarPanel3;
 
 
 	}
