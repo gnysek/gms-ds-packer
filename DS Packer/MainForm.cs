@@ -96,6 +96,18 @@ namespace DS_Packer
 			return sb.ToString();
 		}
 
+		public void GenerateDSListUnpackedFile(string filename)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			foreach (KeyValuePair<string, string> pair in VirtualList)
+			{
+				sb.Append("ds_list_add(argument0, \"" + pair.Value + "\");");
+				sb.AppendLine();
+			}
+			System.IO.File.WriteAllText(@filename, sb.ToString());
+		}
+
 		private void GenerateDSListFile(string filename)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -115,6 +127,18 @@ namespace DS_Packer
 
 			System.IO.File.WriteAllText(@filename, "ds_list_read(argument0, \"" + sb.ToString() + "\");");
 
+		}
+
+		public void GenerateDSMapUnpackedFile(string filename)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			foreach (KeyValuePair<string, string> pair in VirtualList)
+			{
+				sb.Append("ds_map_add(argument0, \"" + pair.Key + "\", \"" + pair.Value + "\");");
+				sb.AppendLine();
+			}
+			System.IO.File.WriteAllText(@filename, sb.ToString());
 		}
 
 		public void GenerateDSMapFile(string filename)
@@ -179,7 +203,7 @@ namespace DS_Packer
 
 		private ImportType FileType = ImportType.None;
 		public ExportType ExportSetting = ExportType.None;
-		public Dictionary<string, string> VirtualList = new Dictionary<string,string>();
+		public Dictionary<string, string> VirtualList = new Dictionary<string, string>();
 
 		public MainForm()
 		{
@@ -222,8 +246,15 @@ namespace DS_Packer
 		private void readCSV(string filename)
 		{
 			bool ANSI = filename.Contains(".txt");
-			ASCIIEncoding ASCII = new ASCIIEncoding();
-			StreamReader sr = new StreamReader(@filename, ANSI ? Encoding.GetEncoding(1250) : Encoding.UTF8);
+			StreamReader sr;
+			if (ANSI)
+			{
+				sr = new StreamReader(@filename, ANSI ? Encoding.GetEncoding(1250) : Encoding.UTF8);
+			}
+			else
+			{
+				sr = new StreamReader(@filename, Encoding.UTF8);
+			}
 
 			string strline = "";
 			string[] _values = null;
@@ -242,11 +273,12 @@ namespace DS_Packer
 			if (_values.Count() > 2)
 			{
 				MessageBox.Show(
-					"This file isn't compatible with " + Application.ProductName + " - should have exactly 2 columns in each line!",
+					"This file isn't compatible with " + Application.ProductName + " - should have exactly 2 columns in each line!\nColumns beyond will be dropped.",
 					Application.ProductName,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 					);
+				//return;
 			}
 
 			while (!sr.EndOfStream)
@@ -273,12 +305,13 @@ namespace DS_Packer
 					}
 				}
 
-				
-				if (x % 50000 == 0) {
+
+				if (x % 50000 == 0)
+				{
 					statusBarPanel3.Text = x.ToString();
 					statusBar1.Refresh();
 				}
-				
+
 			}
 			sr.Close();
 			statusBarPanel3.Text = VirtualList.Count.ToString();
@@ -299,6 +332,10 @@ namespace DS_Packer
 				return;
 			}
 
+			export();
+		}
+
+		private void export() {
 			switch (ExportSetting)
 			{
 				case ExportType.GML_Map:
@@ -327,10 +364,24 @@ namespace DS_Packer
 				switch (ExportSetting)
 				{
 					case ExportType.GML_Map:
-						GenerateDSMapFile(saveFileDialog1.FileName);
+						if (optExportREAD.Checked)
+						{
+							GenerateDSMapFile(saveFileDialog1.FileName);
+						}
+						else
+						{
+							GenerateDSMapUnpackedFile(saveFileDialog1.FileName);
+						}
 						break;
 					case ExportType.GML_List:
-						GenerateDSListFile(saveFileDialog1.FileName);
+						if (optExportREAD.Checked)
+						{
+							GenerateDSListFile(saveFileDialog1.FileName);
+						}
+						else
+						{
+							GenerateDSListUnpackedFile(saveFileDialog1.FileName);
+						}
 						break;
 					case ExportType.Txt:
 						GenerateTXTFile(saveFileDialog1.FileName);
