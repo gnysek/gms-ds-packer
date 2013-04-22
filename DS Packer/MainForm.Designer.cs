@@ -34,6 +34,7 @@
 			this.cValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.statusBar1 = new System.Windows.Forms.StatusBar();
 			this.statusBarPanel1 = new System.Windows.Forms.StatusBarPanel();
+			this.statusBarPanel3 = new System.Windows.Forms.StatusBarPanel();
 			this.statusBarPanel2 = new System.Windows.Forms.StatusBarPanel();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.panelTop = new System.Windows.Forms.Panel();
@@ -83,8 +84,12 @@
 			this.label10 = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-			this.statusBarPanel3 = new System.Windows.Forms.StatusBarPanel();
+			this.panel7 = new System.Windows.Forms.Panel();
+			this.optExportREAD = new System.Windows.Forms.RadioButton();
+			this.optExportADD = new System.Windows.Forms.RadioButton();
+			this.label12 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
 			this.panel1.SuspendLayout();
 			this.panelTop.SuspendLayout();
@@ -94,7 +99,7 @@
 			this.panel4.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
+			this.panel7.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// listView1
@@ -148,6 +153,13 @@
 			this.statusBarPanel1.Text = "-";
 			this.statusBarPanel1.Width = 18;
 			// 
+			// statusBarPanel3
+			// 
+			this.statusBarPanel3.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
+			this.statusBarPanel3.Name = "statusBarPanel3";
+			this.statusBarPanel3.Text = "0";
+			this.statusBarPanel3.Width = 20;
+			// 
 			// statusBarPanel2
 			// 
 			this.statusBarPanel2.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
@@ -198,11 +210,12 @@
 			this.btnOptions.TabIndex = 6;
 			this.btnOptions.Text = "options";
 			this.btnOptions.UseVisualStyleBackColor = true;
-			this.btnOptions.Visible = false;
 			this.btnOptions.Click += new System.EventHandler(this.btnOptions_Click);
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.label12);
+			this.groupBox1.Controls.Add(this.panel7);
 			this.groupBox1.Controls.Add(this.label9);
 			this.groupBox1.Controls.Add(this.checkBox2);
 			this.groupBox1.Controls.Add(this.panel6);
@@ -234,7 +247,7 @@
 			this.label9.Size = new System.Drawing.Size(248, 52);
 			this.label9.TabIndex = 15;
 			this.label9.Text = "When exporting to GML, it will save script to which \r\nwill return map ID.\r\nFor mo" +
-				"re info, check ds_map_read & ds_list_read\r\nin GM:Studio documentation.";
+    "re info, check ds_map_read & ds_list_read\r\nin GM:Studio documentation.";
 			// 
 			// checkBox2
 			// 
@@ -650,12 +663,45 @@
 			// 
 			this.saveFileDialog1.SupportMultiDottedExtensions = true;
 			// 
-			// statusBarPanel3
+			// panel7
 			// 
-			this.statusBarPanel3.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
-			this.statusBarPanel3.Name = "statusBarPanel3";
-			this.statusBarPanel3.Text = "0";
-			this.statusBarPanel3.Width = 20;
+			this.panel7.Controls.Add(this.optExportADD);
+			this.panel7.Controls.Add(this.optExportREAD);
+			this.panel7.Location = new System.Drawing.Point(500, 49);
+			this.panel7.Name = "panel7";
+			this.panel7.Size = new System.Drawing.Size(164, 43);
+			this.panel7.TabIndex = 16;
+			// 
+			// optExportREAD
+			// 
+			this.optExportREAD.AutoSize = true;
+			this.optExportREAD.Checked = true;
+			this.optExportREAD.Location = new System.Drawing.Point(3, 3);
+			this.optExportREAD.Name = "optExportREAD";
+			this.optExportREAD.Size = new System.Drawing.Size(133, 17);
+			this.optExportREAD.TabIndex = 6;
+			this.optExportREAD.TabStop = true;
+			this.optExportREAD.Text = "ds_xxx_read(arg0, \'...\');";
+			this.optExportREAD.UseVisualStyleBackColor = true;
+			// 
+			// optExportADD
+			// 
+			this.optExportADD.AutoSize = true;
+			this.optExportADD.Location = new System.Drawing.Point(3, 23);
+			this.optExportADD.Name = "optExportADD";
+			this.optExportADD.Size = new System.Drawing.Size(155, 17);
+			this.optExportADD.TabIndex = 6;
+			this.optExportADD.Text = "ds_xxx_add(argument0, ...);";
+			this.optExportADD.UseVisualStyleBackColor = true;
+			// 
+			// label12
+			// 
+			this.label12.AutoSize = true;
+			this.label12.Location = new System.Drawing.Point(497, 32);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(116, 13);
+			this.label12.TabIndex = 17;
+			this.label12.Text = "Export structure format:";
 			// 
 			// MainForm
 			// 
@@ -671,6 +717,7 @@
 			this.Text = "DS Map & List Packer - (C) 2013 Gear Studio, Piotr \'gnysek\' Gnys";
 			this.Shown += new System.EventHandler(this.Form1_Shown);
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).EndInit();
 			this.panel1.ResumeLayout(false);
 			this.panelTop.ResumeLayout(false);
@@ -687,7 +734,8 @@
 			this.panel3.PerformLayout();
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
+			this.panel7.ResumeLayout(false);
+			this.panel7.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -749,6 +797,10 @@
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.StatusBarPanel statusBarPanel3;
+		private System.Windows.Forms.Panel panel7;
+		private System.Windows.Forms.RadioButton optExportADD;
+		private System.Windows.Forms.RadioButton optExportREAD;
+		private System.Windows.Forms.Label label12;
 
 
 	}
